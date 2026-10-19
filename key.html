@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API 키 등록 · AI 회의록 도우미</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🔑 Gemini API 키 등록</h1>
+    <a href="./" class="button">← 회의록 도우미로</a>
+  </header>
+
+  <main class="narrow">
+    <section>
+      <h2>현재 상태</h2>
+      <p id="status" class="notice"></p>
+    </section>
+
+    <section>
+      <h2>키 등록</h2>
+      <ol class="guide">
+        <li><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>에서 [API 키 만들기]를 누르고 키를 복사하세요.</li>
+        <li>아래 칸에 붙여넣고 [연결 확인] → [등록]을 누르세요.</li>
+      </ol>
+      <label>Gemini API 키 <input type="password" id="key" autocomplete="off" placeholder="AIza…"></label>
+      <label class="check"><input type="checkbox" id="persist" checked> 이 브라우저에 계속 저장 (공용 PC라면 해제 — 탭을 닫으면 삭제)</label>
+      <div class="row">
+        <button id="btnTest">연결 확인</button>
+        <button id="btnSave" class="primary">등록</button>
+        <button id="btnDelete" class="danger">등록된 키 삭제</button>
+      </div>
+      <p id="result" class="notice" hidden></p>
+    </section>
+
+    <section>
+      <h2>키는 어디로 가나요?</h2>
+      <ul class="muted">
+        <li>키는 <b>이 브라우저에만</b> 저장되고, 회의 처리 때 브라우저에서 Google로 바로 보냅니다.</li>
+        <li>이 사이트의 서버 · GitHub · Vercel에는 전달되지도 저장되지도 않습니다.</li>
+        <li>다른 PC나 다른 브라우저에서 쓰려면 거기서 다시 등록하세요.</li>
+        <li>실제 사내 회의는 유료 등급 키로만 돌리세요. 무료 등급 요청은 Google 제품 개선에 쓰일 수 있습니다.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="key.js"></script>
+</body>
+</html>

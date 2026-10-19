@@ -577,3 +577,6 @@ API 필드 이름이 PRD와 다르면 Google 공식 문서를 확인해서 맞�
 | 2026-10-19 | AI 개발 도구 | F9 Gemini 음성(P1 일부 반영): 모델 기본값 `gemini-3.8-flash-lite-tts`, 목소리 기본값 `Charon`(신뢰감 있는 남성), 스타일 「신뢰감 있는 차분한 남성 목소리로 …」. 응답이 PCM(`audio/l16`)이면 WAV 헤더를 붙여 재생 |
 | 2026-10-19 | AI 개발 도구 | F10 일부 반영: 근거 배지 클릭 시 녹취 탭의 해당 줄로 이동 · 강조 |
 | 2026-10-19 | AI 개발 도구 | 6장 필드 이름(`transcription_config` · `language_codes` · `mode` · `response_format.schema` · `speech_config[].voice` · `speech_metadata.style`)은 google-genai 2.31.0 SDK 타입 정의로 확인 — 일치. 실제 API 호출은 아직 미검증(키 없음) |
+| 2026-10-19 | AI 개발 도구 | **API 키 등록 페이지 추가**(요청): `/key`(key.html · key.js). [연결 확인] 통과한 키만 등록, Argon 불가 키는 회의록 모델을 대체 모델로 자동 전환. 키는 기존과 같이 브라우저 저장소에만 저장(서버 · Vercel 환경변수 미사용). 이 페이지의 「이 브라우저에 계속 저장」은 등록 목적이라 기본 체크(F1 설정 모달은 기본 해제 유지) |
+| 2026-10-19 | AI 개발 도구 | 키가 없을 때 설정 모달 자동 열기 대신 ①에 「API 키 등록」 페이지 링크 안내 |
+| 2026-10-19 | AI 개발 도구 | Vercel 배포 설정: `vercel.json`(cleanUrls · 보안 헤더), `.vercelignore`로 PRD · README · Python 파일은 배포에서 제외 |

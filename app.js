@@ -921,4 +921,3 @@ speechSynthesis.getVoices(); // 음성 목록 미리 불러오기
 
 renderSteps();
 updateGate();
-if (!S.key) openSettings();

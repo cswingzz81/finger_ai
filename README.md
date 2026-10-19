@@ -7,7 +7,7 @@
 
 - 파일: `index.html` · `app.js` · `style.css` (빌드 없음)
 - 실행: 폴더를 Vercel에 그대로 배포하거나, 로컬에서 `python3 -m http.server` 후 Chrome으로 `http://localhost:8000` 접속
-- API 키: 화면의 ⚙ 설정에서 입력 (코드 · 저장소에 넣지 않음)
+- API 키: `/key`(🔑 API 키 등록) 페이지나 ⚙ 설정에서 입력. 키는 브라우저에만 저장되고 코드 · 저장소 · Vercel에 넣지 않음
 - 업로드: 오디오 파일(mp3 · m4a · wav · webm 등) 또는 녹취 `.txt`(`이름: 내용` 형식)
 
 

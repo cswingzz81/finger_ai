@@ -34,6 +34,11 @@ button.primary { background: var(--primary); border-color: var(--primary); color
 button.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
 button.ghost { background: transparent; }
 button.small { padding: 2px 8px; font-size: 12px; }
+a.button { display: inline-block; padding: 7px 14px; border: 1px solid var(--line); border-radius: 6px; color: var(--text); text-decoration: none; }
+a.button:hover { border-color: var(--primary); }
+header nav { display: flex; gap: 8px; }
+main.narrow { max-width: 680px; }
+.guide { margin: 0 0 10px; padding-left: 20px; }
 
 .timer { font-variant-numeric: tabular-nums; font-size: 20px; min-width: 70px; }
 .meter { width: 160px; height: 10px; background: var(--line); border-radius: 5px; overflow: hidden; }

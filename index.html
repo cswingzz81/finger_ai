@@ -9,13 +9,16 @@
 <body>
   <header>
     <h1>AI 회의록 도우미</h1>
-    <button id="btnSettings" class="ghost">⚙ 설정</button>
+    <nav>
+      <a href="key.html" class="button">🔑 API 키 등록</a>
+      <button id="btnSettings" class="ghost">⚙ 설정</button>
+    </nav>
   </header>
 
   <main>
     <section id="secRecord">
       <h2>① 녹음 · 업로드</h2>
-      <p id="keyNotice" class="notice warn" hidden>⚙ 설정에서 API 키를 넣어 주세요.</p>
+      <p id="keyNotice" class="notice warn" hidden>먼저 <a href="key.html">🔑 API 키 등록</a> 페이지에서 Gemini API 키를 등록해 주세요.</p>
       <div class="row">
         <label>회의 제목 <input id="title" value="주간 팀 회의"></label>
         <label>참석자 <input id="participants" placeholder="김가람, 이도윤, 박서연 (선택)"></label>
