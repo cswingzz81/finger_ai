@@ -52,6 +52,28 @@ const MINUTES_SCHEMA = {
   required: ['title', 'purpose', 'summary', 'decisions', 'action_items', 'pending', 'next_meeting', 'tts_script'],
 };
 
+// PRD 12장 가짜 회의 대본 (이름 · 회사 · 금액은 모두 가상)
+const SAMPLE = {
+  title: '주간 팀 회의',
+  participants: '김가람, 이도윤, 박서연',
+  durationSec: 140,
+  transcript: `[U1 00:00:03 김가람] 자, 주간 회의 시작하겠습니다. 오늘 안건은 두 개예요. 가나상사 견적서 수정이랑 다음 데모 일정입니다.
+[U2 00:00:14 김가람] 먼저 견적서요. 가나상사에서 할인 요청이 왔죠?
+[U3 00:00:20 이도윤] 네, 15% 요청했는데요, 내부 기준으로는 10%까지가 최대입니다.
+[U4 00:00:31 김가람] 그럼 할인율은 10%로 하죠. 이도윤 님이 견적서 수정해서 이번 주 금요일, 10월 23일까지 보내 주세요.
+[U5 00:00:44 이도윤] 네, 금요일까지 보내겠습니다.
+[U6 00:00:50 김가람] 다음은 데모 일정입니다. 박서연 님, 고객사에서 가능한 날짜 받았어요?
+[U7 00:01:01 박서연] 네, 10월 28일 수요일 오후 2시가 가능하다고 합니다.
+[U8 00:01:10 김가람] 좋아요, 데모는 10월 28일 수요일 오후 2시로 확정하겠습니다.
+[U9 00:01:20 김가람] 박서연 님이 데모 시나리오 초안을 10월 26일 월요일까지 공유해 주세요.
+[U10 00:01:30 박서연] 알겠습니다.
+[U11 00:01:35 이도윤] 그런데 데모용 샘플 데이터도 정리해야 하지 않을까요?
+[U12 00:01:44 김가람] 맞아요, 그건 필요하겠네요. 누가 할지는 나중에 정하죠.
+[U13 00:01:53 박서연] 그리고 고객사가 모바일 알림 기능도 데모에 넣어 달라고 했는데요.
+[U14 00:02:04 김가람] 그건 예산 확인이 먼저라서, 다음 회의에서 다시 이야기하겠습니다.
+[U15 00:02:15 김가람] 다음 회의는 10월 26일 월요일 오전 10시에 하겠습니다. 수고하셨습니다.`,
+};
+
 const STEPS = [
   { key: 'stt', label: '녹취 변환' },
   { key: 'minutes', label: '회의록 작성' },
@@ -158,6 +180,7 @@ function updateGate() {
   $('keyNotice').hidden = hasKey;
   $('btnStart').disabled = !hasKey || !$('consent').checked || recording;
   $('fileInput').disabled = !hasKey || !$('consent').checked || recording;
+  $('btnSample').disabled = !hasKey || recording;
 }
 
 // ===== Gemini 호출 =====
@@ -394,6 +417,19 @@ function audioMime(blob) {
   if (t.startsWith('audio/')) return t;
   const ext = name.split('.').pop().toLowerCase();
   return { m4a: 'audio/m4a', mp3: 'audio/mpeg', wav: 'audio/wav', webm: 'audio/webm', ogg: 'audio/ogg', flac: 'audio/flac', aac: 'audio/aac' }[ext] || 'audio/webm';
+}
+
+// 샘플 녹취로 STT를 건너뛰고 회의록부터 실행
+function runSample() {
+  $('title').value = SAMPLE.title;
+  $('participants').value = SAMPLE.participants;
+  newMeeting();
+  meeting.transcript = parseTranscriptText(SAMPLE.transcript);
+  meeting.durationSec = SAMPLE.durationSec;
+  notice($('recNotice'), `샘플 녹취를 불러왔습니다 · ${meeting.transcript.length}개 발화 — 결과를 「샘플 정답지」와 비교해 보세요.`);
+  renderTranscript();
+  setStep('stt', 'done', '샘플');
+  runPipeline('minutes');
 }
 
 // "[U1 00:00:03 화자1] 내용" 또는 "김가람: 내용" 또는 그냥 한 줄
@@ -895,6 +931,8 @@ $('btnStart').onclick = startRecording;
 $('btnPause').onclick = togglePause;
 $('btnStop').onclick = stopRecording;
 $('fileInput').onchange = onFileSelected;
+$('btnSample').onclick = runSample;
+$('btnSampleTxt').onclick = () => download(new Blob([SAMPLE.transcript], { type: 'text/plain' }), '샘플녹취_주간팀회의.txt');
 $('steps').onclick = (e) => { const k = e.target.dataset?.retry; if (k) runPipeline(k); };
 document.querySelectorAll('.tab').forEach((b) => (b.onclick = () => showTab(b.dataset.tab)));
 $('tabMinutes').addEventListener('input', onMinutesEdit);

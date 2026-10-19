@@ -46,6 +46,10 @@ main.narrow { max-width: 680px; }
 
 .file { flex-direction: row; align-items: center; gap: 8px; color: var(--text); border: 1px dashed var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; }
 .file input { max-width: 260px; }
+.sample { margin-top: 10px; padding: 8px 12px; border-radius: 8px; background: #f3f7ff; }
+.sample details { margin: 4px 0; font-size: 14px; }
+.sample summary { cursor: pointer; color: var(--primary); }
+.sample table { margin-top: 6px; background: #fff; }
 
 .notice { margin: 8px 0 0; padding: 8px 12px; border-radius: 6px; background: #eef3ff; }
 .notice.warn { background: var(--warn-bg); color: var(--warn-text); }
