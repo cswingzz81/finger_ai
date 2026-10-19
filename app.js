@@ -56,6 +56,7 @@ const MINUTES_SCHEMA = {
 const SAMPLE = {
   title: '주간 팀 회의',
   participants: '김가람, 이도윤, 박서연',
+  audio: 'samples/sample_meeting.mp3', // samples/make_sample_audio.py로 만든 녹음
   durationSec: 140,
   transcript: `[U1 00:00:03 김가람] 자, 주간 회의 시작하겠습니다. 오늘 안건은 두 개예요. 가나상사 견적서 수정이랑 다음 데모 일정입니다.
 [U2 00:00:14 김가람] 먼저 견적서요. 가나상사에서 할인 요청이 왔죠?
@@ -181,6 +182,7 @@ function updateGate() {
   $('btnStart').disabled = !hasKey || !$('consent').checked || recording;
   $('fileInput').disabled = !hasKey || !$('consent').checked || recording;
   $('btnSample').disabled = !hasKey || recording;
+  $('btnSampleAudio').disabled = !hasKey || recording;
 }
 
 // ===== Gemini 호출 =====
@@ -368,7 +370,10 @@ function onRecordingStopped() {
 async function onFileSelected(e) {
   const file = e.target.files[0];
   e.target.value = '';
-  if (!file) return;
+  if (file) await loadFile(file);
+}
+
+async function loadFile(file) {
   newMeeting();
   if (/\.txt$/i.test(file.name) || file.type === 'text/plain') {
     meeting.transcript = parseTranscriptText(await file.text());
@@ -430,6 +435,20 @@ function runSample() {
   renderTranscript();
   setStep('stt', 'done', '샘플');
   runPipeline('minutes');
+}
+
+// 샘플 녹음(같은 대본을 3명 목소리로 읽힌 mp3)을 업로드한 것처럼 녹취 변환부터 실행
+async function runSampleAudio() {
+  if (rec.recorder) return;
+  const res = await fetch(SAMPLE.audio).catch(() => null);
+  if (!res?.ok) {
+    notice($('recNotice'), '샘플 녹음을 불러오지 못했습니다. 로컬에서는 <code>python3 -m http.server</code>로 열어 주세요.', 'err');
+    return;
+  }
+  $('title').value = SAMPLE.title;
+  $('participants').value = SAMPLE.participants;
+  const blob = await res.blob();
+  await loadFile(new File([blob], SAMPLE.audio.split('/').pop(), { type: blob.type }));
 }
 
 // "[U1 00:00:03 화자1] 내용" 또는 "김가람: 내용" 또는 그냥 한 줄
@@ -932,6 +951,7 @@ $('btnPause').onclick = togglePause;
 $('btnStop').onclick = stopRecording;
 $('fileInput').onchange = onFileSelected;
 $('btnSample').onclick = runSample;
+$('btnSampleAudio').onclick = runSampleAudio;
 $('btnSampleTxt').onclick = () => download(new Blob([SAMPLE.transcript], { type: 'text/plain' }), '샘플녹취_주간팀회의.txt');
 $('steps').onclick = (e) => { const k = e.target.dataset?.retry; if (k) runPipeline(k); };
 document.querySelectorAll('.tab').forEach((b) => (b.onclick = () => showTab(b.dataset.tab)));
