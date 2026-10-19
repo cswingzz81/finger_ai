@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 회의록 도우미</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>AI 회의록 도우미</h1>
+    <button id="btnSettings" class="ghost">⚙ 설정</button>
+  </header>
+
+  <main>
+    <section id="secRecord">
+      <h2>① 녹음 · 업로드</h2>
+      <p id="keyNotice" class="notice warn" hidden>⚙ 설정에서 API 키를 넣어 주세요.</p>
+      <div class="row">
+        <label>회의 제목 <input id="title" value="주간 팀 회의"></label>
+        <label>참석자 <input id="participants" placeholder="김가람, 이도윤, 박서연 (선택)"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="consent"> 참석자에게 녹음 사실을 알렸습니다</label>
+      <div class="row controls">
+        <button id="btnStart" class="primary" disabled>● 녹음 시작</button>
+        <span id="timer" class="timer">00:00</span>
+        <div class="meter"><div id="meterBar"></div></div>
+        <button id="btnPause" disabled>Ⅱ 일시정지</button>
+        <button id="btnStop" class="danger" disabled>■ 회의 종료</button>
+      </div>
+      <div class="row upload">
+        <label class="file">
+          <input type="file" id="fileInput" accept="audio/*,.webm,.m4a,.mp3,.wav,.ogg,.flac,.aac,.txt" disabled>
+          <span>⬆ 녹음 파일 업로드 (mp3 · m4a · wav · webm …) 또는 녹취 .txt</span>
+        </label>
+      </div>
+      <p id="recNotice" class="notice" hidden></p>
+    </section>
+
+    <section id="secPipeline">
+      <h2>② 진행 상태</h2>
+      <ol id="steps" class="steps"></ol>
+      <p id="pipeNotice" class="notice" hidden></p>
+    </section>
+
+    <section id="secResult">
+      <div class="tabs">
+        <h2>③ 결과</h2>
+        <button class="tab active" data-tab="minutes">회의록</button>
+        <button class="tab" data-tab="transcript">녹취</button>
+      </div>
+      <div id="tabMinutes"><p class="muted">회의를 녹음하거나 파일을 올리면 여기에 회의록이 나옵니다.</p></div>
+      <div id="tabTranscript" hidden><p class="muted">아직 녹취가 없습니다.</p></div>
+    </section>
+
+    <section id="secListen">
+      <h2>④ 듣기</h2>
+      <div class="row controls">
+        <button data-say="full" class="primary">▶ 전체 듣기</button>
+        <button data-say="decisions">결정사항만</button>
+        <button data-say="actions">액션아이템만</button>
+        <button id="btnSayStop">■ 정지</button>
+        <label>속도
+          <select id="rate">
+            <option>0.8</option><option selected>1.0</option><option>1.25</option><option>1.5</option>
+          </select>
+        </label>
+        <span id="ttsInfo" class="muted"></span>
+      </div>
+      <audio id="player" controls hidden></audio>
+    </section>
+
+    <section id="secExport">
+      <h2>⑤ 내보내기</h2>
+      <div class="row">
+        <button id="btnCopyMd">MD 복사</button>
+        <button id="btnDlMd">MD 다운로드</button>
+        <button id="btnDlAudio">녹음 다운로드</button>
+        <button id="btnDlTxt">녹취 다운로드</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="dlgSettings">
+    <form method="dialog" id="formSettings">
+      <h2>설정</h2>
+      <label>Gemini API 키 <input type="password" id="sKey" autocomplete="off"></label>
+      <div class="row">
+        <button type="button" id="btnTestKey">연결 확인</button>
+        <span id="keyStatus" class="muted"></span>
+      </div>
+      <label class="check"><input type="checkbox" id="sPersist"> 이 브라우저에 저장 (해제 시 탭을 닫으면 삭제)</label>
+      <label>회의록 모델 <input id="sMinutesModel"></label>
+      <label>대체 모델 <input id="sFallbackModel"></label>
+      <label>STT 모델 <input id="sSttModel"></label>
+      <label>음성
+        <select id="sVoiceEngine">
+          <option value="chrome">Chrome 내장 음성 (무료 · 기본)</option>
+          <option value="gemini">Gemini 음성</option>
+        </select>
+      </label>
+      <div class="row">
+        <label>Gemini TTS 모델 <input id="sTtsModel"></label>
+        <label>Gemini 목소리 <input id="sTtsVoice" list="voiceList"></label>
+        <datalist id="voiceList">
+          <option value="Charon">Charon — 차분한 정보 전달형 남성</option>
+          <option value="Sadaltager">Sadaltager — 박식한 전문가 톤 남성</option>
+          <option value="Schedar">Schedar — 고른 톤 남성</option>
+          <option value="Orus">Orus — 단단한 톤 남성</option>
+          <option value="Kore">Kore — 단단한 톤 여성</option>
+        </datalist>
+      </div>
+      <label>용어집 <textarea id="sGlossary" rows="3"></textarea></label>
+      <div class="row end">
+        <button type="button" id="btnCloseSettings">닫기</button>
+        <button id="btnSaveSettings" value="save" class="primary">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
