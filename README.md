@@ -3,7 +3,7 @@
 ## AI 회의록 도우미 (웹)
 
 회의 녹음 또는 녹음 파일 업로드 → 녹취(STT) → 회의록 → 검증 → 듣기까지 자동으로 이어지는 정적 웹앱이에요.
-요구사항은 [PRD.md](PRD.md)에 있어요.
+처음이라면 [GUIDE.md](GUIDE.md)(프로젝트 설명서)부터 읽어 보세요. 요구사항은 [PRD.md](PRD.md)에 있어요.
 
 - 파일: `index.html` · `app.js` · `style.css` (빌드 없음)
 - 실행: 폴더를 Vercel에 그대로 배포하거나, 로컬에서 `python3 -m http.server` 후 Chrome으로 `http://localhost:8000` 접속
